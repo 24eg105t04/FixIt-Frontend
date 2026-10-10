@@ -1,0 +1,204 @@
+
+.nearby-page {
+  min-height: 100vh;
+  padding: 32px;
+  color: #eef4ff;
+  background:
+    radial-gradient(ellipse at top left, #123d4a 0%, transparent 45%),
+    linear-gradient(135deg, #080d19, #111b2d 60%, #09131c);
+}
+
+.nearby-heading,
+.nearby-toolbar,
+.nearby-stats,
+.shop-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.nearby-heading h1 {
+  margin: 6px 0;
+  font-size: clamp(26px, 4vw, 38px);
+}
+
+.nearby-heading p,
+.nearby-list-subtitle {
+  color: #9aadc5;
+}
+
+.nearby-eyebrow {
+  color: #46e5cb !important;
+  letter-spacing: 3px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.location-btn,
+.refresh-btn {
+  padding: 12px 18px;
+  color: #061b20;
+  background: #50e3cc;
+  border: 0;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.nearby-toolbar {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: 26px 0 18px;
+}
+
+.nearby-toolbar select {
+  min-width: 160px;
+  padding: 12px;
+  color: #eef4ff;
+  background: #172438;
+  border: 1px solid #30425a;
+  border-radius: 10px;
+}
+
+.nearby-stats {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.nearby-stats div {
+  min-width: 140px;
+  padding: 15px 20px;
+  background: #172438;
+  border: 1px solid #26374e;
+  border-radius: 14px;
+}
+
+.nearby-stats span,
+.nearby-stats strong {
+  display: block;
+}
+
+.nearby-stats span {
+  color: #a5b5c9;
+  font-size: 13px;
+}
+
+.nearby-stats strong {
+  margin-top: 7px;
+  font-size: 23px;
+}
+
+.nearby-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(270px, 0.9fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.nearby-map,
+.nearby-list {
+  overflow: hidden;
+  border: 1px solid #2b4055;
+  border-radius: 18px;
+  background: #111d2d;
+}
+
+.nearby-map .leaflet-container {
+  background: #dbe5eb;
+  z-index: 1;
+}
+
+.nearby-list {
+  max-height: 560px;
+  overflow-y: auto;
+  padding: 18px;
+}
+
+.nearby-list h2 {
+  margin: 0;
+}
+
+.shop-card {
+  margin-top: 15px;
+  padding: 16px;
+  background: #19283b;
+  border: 1px solid #30445b;
+  border-radius: 14px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.shop-card:hover {
+  transform: translateY(-3px);
+  border-color: #50e3cc;
+}
+
+.shop-symbol {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: #244b52;
+  color: #50e3cc;
+}
+
+.shop-distance {
+  color: #50e3cc;
+  font-size: 13px;
+}
+
+.shop-card h3 {
+  margin-bottom: 6px;
+}
+
+.shop-card p {
+  color: #aabbd0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.shop-card a {
+  color: #50e3cc;
+}
+
+.directions-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.nearby-message {
+  color: #ffcc80;
+  margin-bottom: 16px;
+}
+
+.nearby-attribution {
+  margin-top: 15px;
+  color: #93a7bf;
+  font-size: 12px;
+}
+
+@media (max-width: 850px) {
+  .nearby-page {
+    padding: 18px;
+  }
+
+  .nearby-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .nearby-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .nearby-map .leaflet-container {
+    height: 400px !important;
+  }
+
+  .nearby-list {
+    max-height: none;
+  }
+}
