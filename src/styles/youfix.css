@@ -1,0 +1,1226 @@
+
+/* YouFix refinement — paste at the END of youfix.css */
+
+.youfix-page {
+  background: #f5f7fa;
+  color: #202633;
+}
+
+.youfix-hero {
+  border-radius: 20px;
+  box-shadow: 0 6px 22px rgba(32, 38, 51, 0.05);
+}
+
+.youfix-intake,
+.youfix-guides {
+  background: #ffffff;
+  border: 1px solid #e1e5ec;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px rgba(32, 38, 51, 0.04);
+}
+
+.youfix-device-grid {
+  gap: 12px;
+}
+
+.youfix-device-card {
+  min-width: 0;
+  min-height: 110px;
+  border-radius: 14px;
+  box-shadow: none;
+  transition: border-color 0.2s ease,
+              box-shadow 0.2s ease,
+              transform 0.2s ease;
+}
+
+.youfix-device-card:hover {
+  transform: translateY(-2px);
+  border-color: #f47721;
+  box-shadow: 0 6px 18px rgba(32, 38, 51, 0.07);
+}
+
+.youfix-device-card.selected {
+  border-color: #f47721;
+  background: #fff5ed;
+}
+
+.youfix-form-grid {
+  gap: 18px;
+  align-items: start;
+}
+
+.youfix-form-grid label {
+  min-width: 0;
+  line-height: 1.5;
+}
+
+.youfix-form-grid input,
+.youfix-form-grid select,
+.youfix-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  box-sizing: border-box;
+  border-radius: 11px;
+}
+
+.youfix-selected-device {
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid #e1e5ec;
+  border-radius: 15px;
+  background: #ffffff;
+}
+
+.youfix-selected-device img {
+  flex-shrink: 0;
+  max-width: 110px;
+  background: #f5f7fa;
+}
+
+.youfix-guide-grid {
+  gap: 18px;
+}
+
+.youfix-guide-card {
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(32, 38, 51, 0.03);
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.youfix-guide-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(32, 38, 51, 0.08);
+}
+
+.youfix-guide-image {
+  background: #eef1f5;
+}
+
+.youfix-guide-body {
+  padding: 20px;
+}
+
+.youfix-guide-body h3 {
+  line-height: 1.4;
+}
+
+.youfix-guide-footer {
+  padding-top: 15px;
+}
+
+.youfix-modal-backdrop {
+  z-index: 9999;
+  background: rgba(15, 20, 30, 0.72);
+}
+
+.youfix-guide-modal {
+  border: 1px solid #e1e5ec;
+  border-radius: 18px;
+}
+
+.youfix-step-list {
+  background: #f8f9fb;
+}
+
+.youfix-step-list > button.active {
+  background: #fff0e6;
+  color: #a84313;
+}
+
+.youfix-step-image {
+  background: #eef1f5;
+  border-radius: 14px;
+}
+
+.youfix-primary-btn {
+  background: #ed701d;
+  border-color: #ed701d;
+}
+
+.youfix-primary-btn:hover {
+  background: #d65e12;
+}
+
+.youfix-page button:focus-visible {
+  outline: 3px solid #7ba6ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .youfix-device-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .youfix-guide-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .youfix-page {
+    padding: 12px;
+  }
+
+  .youfix-intake,
+  .youfix-guides {
+    padding: 16px;
+  }
+
+  .youfix-device-grid,
+  .youfix-form-grid,
+  .youfix-guide-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .youfix-device-card {
+    min-height: 90px;
+  }
+
+  .youfix-selected-device {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .youfix-selected-device img {
+    width: 75px;
+    height: 90px;
+  }
+
+  .youfix-modal-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ===== YOUFIX EMERGENCY LAYOUT FIX ===== */
+
+.youfix-page {
+  position: relative;
+  isolation: isolate;
+  background: #f5f7fb !important;
+  color: #182235 !important;
+  min-height: 100vh;
+}
+
+.youfix-page::before,
+.youfix-page::after {
+  display: none !important;
+}
+
+.youfix-hero,
+.youfix-intake,
+.youfix-guides {
+  position: relative;
+  background: #ffffff !important;
+  color: #182235 !important;
+  border-radius: 18px;
+}
+
+.youfix-guide-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 22px !important;
+  align-items: stretch;
+}
+
+.youfix-guide-card {
+  display: flex !important;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  background: #ffffff !important;
+  color: #182235 !important;
+  border: 1px solid #e1e6ee !important;
+  border-radius: 16px !important;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.youfix-guide-image {
+  display: block;
+  width: 100% !important;
+  height: 190px !important;
+  max-height: 190px !important;
+  object-fit: cover !important;
+  overflow: hidden;
+}
+
+.youfix-guide-card img {
+  max-width: 100%;
+}
+
+.youfix-guide-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 20px !important;
+  background: #ffffff !important;
+  color: #182235 !important;
+}
+
+.youfix-guide-body h3 {
+  color: #182235 !important;
+  font-size: 19px;
+  line-height: 1.4;
+}
+
+.youfix-guide-body p {
+  color: #64748b !important;
+  line-height: 1.6;
+}
+
+.youfix-guide-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid #e9edf3;
+}
+
+.youfix-guide-footer button {
+  cursor: pointer;
+  padding: 10px 16px !important;
+  background: #f47721 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 9px !important;
+  font-weight: 700;
+}
+
+.youfix-guide-footer button:hover {
+  background: #d95e10 !important;
+}
+
+@media (max-width: 1000px) {
+  .youfix-guide-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 650px) {
+  .youfix-guide-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+/* ==========================================
+   YOUFIX — FORM AND LAYOUT REPAIR
+   ========================================== */
+
+.youfix-page {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 32px;
+  box-sizing: border-box;
+  background: #f5f7fb;
+  color: #1e293b;
+  text-align: left;
+}
+
+/* Keep the background subtle and behind the content */
+.youfix-page::before,
+.youfix-page::after {
+  pointer-events: none;
+}
+
+.youfix-hero,
+.youfix-intake,
+.youfix-guides {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 24px;
+  padding: 28px;
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  box-shadow: 0 5px 20px rgba(15, 23, 42, 0.04);
+}
+
+.youfix-hero {
+  overflow: hidden;
+}
+
+/* Device selection cards */
+.youfix-device-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  margin: 20px 0 28px;
+}
+
+.youfix-device-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 115px;
+  padding: 18px;
+  box-sizing: border-box;
+  border: 1px solid #dfe5ee;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #1e293b;
+  text-align: left;
+  cursor: pointer;
+}
+
+.youfix-device-card.selected {
+  border: 2px solid #f47721;
+  background: #fff5ec;
+}
+
+.youfix-device-card:hover {
+  border-color: #f47721;
+}
+
+/* Form layout */
+.youfix-form-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 22px !important;
+  align-items: start;
+  margin-top: 24px;
+}
+
+.youfix-form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+  margin: 0;
+  color: #293548;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.youfix-form-grid input,
+.youfix-form-grid select,
+.youfix-search input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 12px 14px;
+  box-sizing: border-box;
+  border: 1px solid #d7dee8;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #1e293b;
+  font: inherit;
+  font-weight: 400;
+}
+
+.youfix-form-grid input:focus,
+.youfix-form-grid select:focus,
+.youfix-search input:focus {
+  outline: none;
+  border-color: #f47721;
+  box-shadow: 0 0 0 3px rgba(244, 119, 33, 0.12);
+}
+
+/* Selected phone or laptop */
+.youfix-selected-device {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.youfix-selected-device img {
+  width: 100px;
+  height: 110px;
+  flex: 0 0 100px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #f5f7fa;
+}
+
+/* Photo upload */
+.youfix-upload-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.youfix-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+  padding: 14px 18px;
+  border: 1px dashed #f47721;
+  border-radius: 12px;
+  background: #fff8f2;
+  color: #293548;
+  cursor: pointer;
+}
+
+.youfix-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* Repair guide cards */
+.youfix-guide-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 22px !important;
+  align-items: stretch;
+}
+
+.youfix-guide-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e1e6ee;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #1e293b;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+
+.youfix-guide-image {
+  display: block;
+  width: 100%;
+  height: 190px;
+  max-height: 190px;
+  object-fit: cover;
+  background: #eef2f7;
+}
+
+.youfix-guide-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: #ffffff;
+  color: #1e293b;
+}
+
+.youfix-guide-body h3 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.youfix-guide-body p {
+  color: #64748b;
+  line-height: 1.65;
+}
+
+.youfix-guide-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #e8edf3;
+}
+
+.youfix-guide-footer button,
+.youfix-primary-btn {
+  padding: 11px 16px;
+  border: 0;
+  border-radius: 9px;
+  background: #ed701d;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.youfix-guide-footer button:hover,
+.youfix-primary-btn:hover {
+  background: #d65e12;
+}
+
+/* Responsive layouts */
+@media (max-width: 1000px) {
+  .youfix-page {
+    padding: 22px;
+  }
+
+  .youfix-device-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .youfix-guide-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 650px) {
+  .youfix-page {
+    padding: 12px;
+  }
+
+  .youfix-hero,
+  .youfix-intake,
+  .youfix-guides {
+    padding: 17px;
+    border-radius: 14px;
+  }
+
+  .youfix-device-grid,
+  .youfix-form-grid,
+  .youfix-guide-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .youfix-device-card {
+    min-height: 85px;
+  }
+
+  .youfix-selected-device {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .youfix-selected-device img {
+    width: 75px;
+    height: 85px;
+    flex-basis: 75px;
+  }
+}
+
+/* ===== YouFix final visual polish ===== */
+
+/* Prevent the hero heading from overlapping */
+.youfix-hero h1 {
+  position: relative;
+  display: block;
+  font-size: clamp(36px, 4vw, 58px);
+  line-height: 1.12;
+  letter-spacing: -1.8px;
+  margin: 22px 0;
+  overflow-wrap: break-word;
+}
+
+.youfix-hero h1 span {
+  display: block;
+  line-height: 1.12;
+}
+
+/* Hide the dark animated background behind YouFix */
+.youfix-page {
+  position: relative;
+  z-index: 1;
+  background: #f3f6fb !important;
+  isolation: isolate;
+}
+
+.youfix-page::before,
+.youfix-page::after {
+  display: none !important;
+}
+
+/* Neat device selection cards */
+.youfix-device-grid {
+  gap: 14px !important;
+}
+
+.youfix-device-card {
+  position: relative;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+  min-height: 120px;
+  padding: 20px !important;
+  text-align: left;
+  border: 1px solid #dfe5ee !important;
+  border-radius: 15px !important;
+  background: #ffffff !important;
+  color: #253044 !important;
+}
+
+.youfix-device-card.selected {
+  border: 2px solid #f47721 !important;
+  background: #fff5ec !important;
+}
+
+/* Keep selection symbols aligned */
+.youfix-device-card > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.youfix-device-card.selected::after {
+  content: "✓";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #ed701d;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Consistent section spacing */
+.youfix-intake,
+.youfix-guides {
+  margin-top: 24px;
+  padding: 28px;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+/* Clean form fields */
+.youfix-form-grid {
+  column-gap: 24px !important;
+  row-gap: 22px !important;
+}
+
+.youfix-form-grid label {
+  gap: 10px;
+}
+
+.youfix-form-grid input,
+.youfix-form-grid select,
+.youfix-search input {
+  min-height: 50px;
+  border-radius: 11px;
+}
+
+/* Smaller screens */
+@media (max-width: 650px) {
+  .youfix-hero h1 {
+    font-size: 36px;
+    letter-spacing: -1px;
+  }
+
+  .youfix-intake,
+  .youfix-guides {
+    padding: 18px;
+  }
+
+  .youfix-device-card {
+    min-height: 95px;
+    padding: 14px !important;
+  }
+}
+
+/* Fix YouFix guide modal visibility */
+.youfix-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  background: rgba(15, 23, 42, 0.78);
+  box-sizing: border-box;
+}
+
+.youfix-guide-modal {
+  position: relative !important;
+  z-index: 1000000 !important;
+  display: block;
+  width: min(1100px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: auto;
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+}
+
+.youfix-modal-header {
+  background: #ffffff;
+  color: #1e293b;
+}
+
+@media (max-width: 650px) {
+  .youfix-modal-backdrop {
+    padding: 8px;
+  }
+
+  .youfix-guide-modal {
+    width: 100%;
+    max-height: 95vh;
+  }
+}
+
+/* ===== YouFix walkthrough styling fix ===== */
+
+.youfix-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  background: rgba(12, 18, 30, 0.78);
+}
+
+.youfix-guide-modal {
+  position: relative !important;
+  display: flex;
+  flex-direction: column;
+  width: min(1050px, 100%);
+  max-width: 100%;
+  max-height: 88vh;
+  margin: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+  border: 1px solid #e1e7ef;
+  border-radius: 18px;
+  background: #ffffff !important;
+  color: #1e293b !important;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+}
+
+.youfix-modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px;
+  border-bottom: 1px solid #e5eaf1;
+  background: #ffffff;
+}
+
+.youfix-modal-header h2 {
+  margin: 8px 0;
+  color: #172033;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.25;
+}
+
+.youfix-modal-header button {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #dfe5ee;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #334155;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.youfix-progress {
+  padding: 12px 24px;
+  background: #fff7f0;
+  border-bottom: 1px solid #f3e1d4;
+}
+
+.youfix-modal-content {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  min-width: 0;
+}
+
+.youfix-step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  background: #f7f9fc;
+  border-right: 1px solid #e5eaf1;
+}
+
+.youfix-step-list button {
+  width: 100%;
+  padding: 12px;
+  text-align: left;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: #334155;
+  cursor: pointer;
+}
+
+.youfix-step-list button.active {
+  border-color: #f5d2bb;
+  background: #fff0e5;
+  color: #a74310;
+}
+
+.youfix-step-detail {
+  min-width: 0;
+  padding: 26px;
+  overflow-wrap: anywhere;
+}
+
+.youfix-step-detail h3 {
+  margin-top: 0;
+  font-size: 25px;
+  line-height: 1.35;
+}
+
+.youfix-step-detail p {
+  line-height: 1.8;
+  color: #475569;
+}
+
+.youfix-step-detail img,
+.youfix-step-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  max-height: 340px;
+  height: auto;
+  object-fit: contain;
+  box-sizing: border-box;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.youfix-guide-modal button {
+  cursor: pointer;
+}
+
+.youfix-guide-modal a {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 700px) {
+  .youfix-modal-backdrop {
+    padding: 8px;
+  }
+
+  .youfix-guide-modal {
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+
+  .youfix-modal-header {
+    padding: 16px;
+  }
+
+  .youfix-modal-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .youfix-step-list {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 12px;
+    border-right: 0;
+    border-bottom: 1px solid #e5eaf1;
+  }
+
+  .youfix-step-list button {
+    flex: 0 0 170px;
+  }
+
+  .youfix-step-detail {
+    padding: 18px;
+  }
+}
+
+/* ===== FIX: YouFix walkthrough layout ===== */
+
+.youfix-modal-content {
+  display: grid !important;
+  grid-template-columns: 270px minmax(0, 1fr) !important;
+  align-items: start !important;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.youfix-step-list {
+  min-width: 0;
+  width: 100%;
+  padding: 24px !important;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+}
+
+.youfix-step-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  width: 100%;
+  padding: 24px 28px !important;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.youfix-step-detail > img,
+.youfix-step-detail .youfix-step-image {
+  display: block;
+  position: static !important;
+  width: 100% !important;
+  height: 220px !important;
+  max-height: 220px !important;
+  object-fit: contain !important;
+  object-position: center;
+  margin: 0 !important;
+  background: #f4f6f9;
+  border: 1px solid #e0e6ef;
+  border-radius: 12px;
+}
+
+.youfix-step-detail h2,
+.youfix-step-detail h3 {
+  position: static !important;
+  margin: 0 !important;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.youfix-step-detail p {
+  margin: 0;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.youfix-step-detail button {
+  position: static !important;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 42px;
+  padding: 10px 16px;
+  border-radius: 9px;
+}
+
+.youfix-step-detail a {
+  overflow-wrap: anywhere;
+}
+
+.youfix-modal-header {
+  position: relative;
+  z-index: 2;
+  padding: 24px 30px !important;
+}
+
+@media (max-width: 750px) {
+  .youfix-modal-content {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .youfix-step-list {
+    padding: 16px !important;
+  }
+
+  .youfix-step-detail {
+    padding: 18px !important;
+  }
+
+  .youfix-step-detail > img,
+  .youfix-step-detail .youfix-step-image {
+    height: 180px !important;
+    max-height: 180px !important;
+  }
+}
+
+/* ===== YouFix modal: restore scrolling ===== */
+
+.youfix-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+.youfix-guide-modal {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: min(1200px, 100%) !important;
+  max-width: 1200px !important;
+  height: 85vh !important;
+  max-height: 85vh !important;
+  min-height: 0 !important;
+  margin: auto !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+}
+
+.youfix-modal-header {
+  flex: 0 0 auto !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.youfix-modal-content {
+  display: grid !important;
+  grid-template-columns: 280px minmax(0, 1fr) !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  overflow: hidden !important;
+  align-items: stretch !important;
+}
+
+.youfix-step-list {
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+
+.youfix-step-detail {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain;
+  padding: 24px 28px !important;
+  box-sizing: border-box !important;
+}
+
+.youfix-step-detail img,
+.youfix-step-detail .youfix-step-image {
+  position: static !important;
+  display: block !important;
+  width: 100% !important;
+  height: 220px !important;
+  max-height: 220px !important;
+  object-fit: contain !important;
+  margin: 0 0 16px !important;
+}
+
+.youfix-step-detail h2,
+.youfix-step-detail h3 {
+  position: static !important;
+  line-height: 1.35 !important;
+  margin: 12px 0 !important;
+}
+
+@media (max-width: 750px) {
+  .youfix-modal-backdrop {
+    padding: 8px !important;
+  }
+
+  .youfix-guide-modal {
+    width: 100% !important;
+    height: 92vh !important;
+    max-height: 92vh !important;
+  }
+
+  .youfix-modal-content {
+    grid-template-columns: minmax(0, 1fr) !important;
+    overflow-y: auto !important;
+  }
+
+  .youfix-step-list {
+    max-height: 180px !important;
+  }
+
+  .youfix-step-detail {
+    height: auto !important;
+    overflow: visible !important;
+    padding: 16px !important;
+  }
+}
+
+.youfix-page {
+  color: var(--fixit-text) !important;
+  background: transparent !important;
+}
+
+.youfix-hero,
+.youfix-intake,
+.youfix-guides,
+.youfix-selected-device,
+.youfix-guide-card,
+.youfix-guide-modal {
+  color: var(--fixit-text) !important;
+  background: var(--fixit-surface) !important;
+  border-color: var(--fixit-border) !important;
+}
+
+.youfix-guide-body,
+.youfix-step-list,
+.youfix-step-image,
+.youfix-guide-image,
+.youfix-step-list > button.active {
+  color: var(--fixit-text) !important;
+  background: var(--fixit-surface-alt) !important;
+  border-color: var(--fixit-border) !important;
+}
+
+.youfix-page h1,
+.youfix-page h2,
+.youfix-page h3,
+.youfix-page strong,
+.youfix-guide-modal h1,
+.youfix-guide-modal h2,
+.youfix-guide-modal h3,
+.youfix-guide-modal strong {
+  color: var(--fixit-text) !important;
+}
+
+.youfix-page p,
+.youfix-page label,
+.youfix-page span,
+.youfix-guide-modal p,
+.youfix-guide-modal span {
+  color: var(--fixit-muted);
+}
+
+.youfix-page input,
+.youfix-page select,
+.youfix-page textarea {
+  color: var(--fixit-text) !important;
+  background: var(--fixit-bg) !important;
+  border-color: var(--fixit-border) !important;
+}
+
+.youfix-primary-btn,
+.youfix-device-card.selected::after {
+  color: var(--fixit-accent-foreground) !important;
+  background: var(--fixit-accent) !important;
+  border-color: var(--fixit-border) !important;
+}
+
+.youfix-device-card.selected,
+.youfix-step-list > button.active {
+  border-color: var(--fixit-accent) !important;
+}

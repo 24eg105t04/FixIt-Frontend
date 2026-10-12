@@ -28,7 +28,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setError("");
 
@@ -58,7 +58,7 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      const result = register({
+      const result = await register({
         name: cleanName,
         email: cleanEmail,
         password,
@@ -77,8 +77,8 @@ export default function Signup() {
           : "/customer-dashboard",
         { replace: true }
       );
-    } catch {
-      setError("Something went wrong. Please try again.");
+    } catch (requestError) {
+      setError(requestError.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -23,7 +23,7 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setError("");
 
@@ -37,7 +37,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const result = login({ email: cleanEmail, password });
+      const result = await login({ email: cleanEmail, password });
 
       if (!result.success) {
         setError(result.message || "Unable to sign in. Please try again.");
@@ -50,8 +50,8 @@ export default function Login() {
           : "/customer-dashboard";
 
       navigate(location.state?.from || destination, { replace: true });
-    } catch {
-      setError("Something went wrong. Please try again.");
+    } catch (requestError) {
+      setError(requestError.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -1,0 +1,188 @@
+.public-shop-page {
+  min-height: 100vh;
+  padding: 0 0 56px;
+  color: var(--fixit-text);
+  background: color-mix(in srgb, var(--fixit-bg) 78%, transparent);
+}
+
+.public-shop-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+  padding: 0 clamp(18px, 5vw, 70px);
+  border-bottom: 1px solid var(--fixit-border);
+  background: color-mix(in srgb, var(--fixit-surface) 82%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.public-shop-topbar a,
+.public-shop-contact a,
+.public-shop-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--fixit-accent);
+  text-decoration: none;
+}
+
+.public-shop-topbar span {
+  color: var(--fixit-muted);
+  font-size: 13px;
+}
+
+.public-shop-cover {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 290px;
+  padding: 35px clamp(18px, 8vw, 120px);
+  background-image: linear-gradient(110deg, color-mix(in srgb, var(--fixit-surface-alt) 95%, transparent), color-mix(in srgb, var(--fixit-surface) 70%, transparent));
+  background-position: center;
+  background-size: cover;
+  border-bottom: 1px solid var(--fixit-border);
+}
+
+.public-shop-brand {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.public-shop-brand img {
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border: 1px solid var(--fixit-border);
+  border-radius: 12px;
+  background: var(--fixit-surface);
+}
+
+.public-shop-brand h1 {
+  margin: 0 0 7px;
+  color: var(--fixit-text);
+  font: 600 36px/1.12 'Space Grotesk', 'Segoe UI', sans-serif;
+}
+
+.public-shop-brand p,
+.public-shop-panel p {
+  margin: 0;
+  color: var(--fixit-muted);
+  line-height: 1.7;
+}
+
+.public-shop-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 18px;
+  width: min(1140px, calc(100% - 36px));
+  margin: 24px auto 0;
+}
+
+.public-shop-main {
+  display: grid;
+  gap: 14px;
+}
+
+.public-shop-panel {
+  min-width: 0;
+  padding: 22px;
+  color: var(--fixit-text);
+  background: color-mix(in srgb, var(--fixit-surface) 90%, transparent);
+  border: 1px solid var(--fixit-border);
+  border-radius: 10px;
+  backdrop-filter: blur(12px);
+}
+
+.public-shop-panel .eyebrow {
+  display: block;
+  margin-bottom: 13px;
+  color: var(--fixit-accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.public-shop-panel h2 {
+  margin: 22px 0 12px;
+  color: var(--fixit-text);
+  font-size: 17px;
+}
+
+.public-shop-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.public-shop-tags span {
+  padding: 7px 10px;
+  color: var(--fixit-text);
+  background: var(--fixit-surface-alt);
+  border: 1px solid var(--fixit-border);
+  border-radius: 7px;
+  font-size: 12px;
+}
+
+.public-shop-panel > p > svg,
+.public-shop-contact > div > svg,
+.public-shop-contact > a > svg {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+  color: var(--fixit-accent);
+}
+
+.public-shop-link {
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.public-shop-link svg {
+  transform: rotate(135deg);
+}
+
+.public-shop-map {
+  overflow: hidden;
+  margin-top: 16px;
+  border: 1px solid var(--fixit-border);
+  border-radius: 8px;
+}
+
+.public-shop-contact {
+  align-self: start;
+  display: grid;
+  gap: 15px;
+}
+
+.public-shop-contact > a:not(.public-shop-cta),
+.public-shop-contact > div {
+  color: var(--fixit-text);
+  overflow-wrap: anywhere;
+}
+
+.public-shop-cta {
+  justify-content: center;
+  min-height: 42px;
+  margin-top: 5px;
+  color: var(--fixit-accent-foreground) !important;
+  background: var(--fixit-accent);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .public-shop-content {
+    grid-template-columns: 1fr;
+  }
+
+  .public-shop-cover {
+    min-height: 230px;
+    padding: 24px 18px;
+  }
+
+  .public-shop-brand h1 {
+    font-size: 28px;
+  }
+}

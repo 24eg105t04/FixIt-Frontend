@@ -5,18 +5,18 @@
 ========================================================= */
 
 :root {
-  --repair-bg: #090B0F;
-  --repair-sidebar: #0C0E13;
-  --repair-surface: #11151C;
-  --repair-surface-2: #171C25;
-  --repair-surface-hover: #1C222C;
-  --repair-orange: #FF791A;
-  --repair-orange-light: #FFAA60;
-  --repair-orange-soft: rgba(255, 121, 26, 0.12);
-  --repair-orange-glow: rgba(255, 121, 26, 0.20);
-  --repair-text: #F3F5F8;
-  --repair-muted: #9AA4B2;
-  --repair-border: rgba(255, 255, 255, 0.09);
+  --repair-bg: var(--fixit-bg);
+  --repair-sidebar: var(--fixit-surface);
+  --repair-surface: var(--fixit-surface);
+  --repair-surface-2: var(--fixit-surface-alt);
+  --repair-surface-hover: color-mix(in srgb, var(--fixit-surface-alt) 86%, var(--fixit-accent));
+  --repair-orange: var(--fixit-accent);
+  --repair-orange-light: var(--fixit-accent);
+  --repair-orange-soft: color-mix(in srgb, var(--fixit-accent) 13%, transparent);
+  --repair-orange-glow: color-mix(in srgb, var(--fixit-accent) 18%, transparent);
+  --repair-text: var(--fixit-text);
+  --repair-muted: var(--fixit-muted);
+  --repair-border: var(--fixit-border);
   --repair-green: #5ED6A0;
   --repair-red: #FF7777;
   --repair-yellow: #F8C66B;
@@ -34,11 +34,11 @@
   isolation: isolate;
   display: flex;
   min-height: 100vh;
-  overflow: clip;
+  overflow: visible;
   color: var(--repair-text);
   background: var(--repair-bg);
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
-  color-scheme: dark;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  color-scheme: inherit;
 }
 
 .repair-app button,
@@ -2458,5 +2458,484 @@
   .repair-app *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Wine Ash Cyber Workshop */
+.repair-app {
+  overflow: visible;
+  background: transparent;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+}
+
+.repair-app::before {
+  background:
+    radial-gradient(ellipse at 77% 5%, color-mix(in srgb, var(--fixit-accent) 7%, transparent), transparent 37%);
+  animation: none;
+}
+
+.repair-sidebar {
+  background: color-mix(in srgb, var(--fixit-surface) 92%, transparent);
+  border-color: var(--repair-border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.repair-brand-icon,
+.repair-avatar,
+.repair-top-avatar {
+  color: var(--fixit-text);
+  background: var(--fixit-accent);
+  border-color: color-mix(in srgb, var(--fixit-accent) 70%, var(--fixit-border));
+  box-shadow: 0 0 22px color-mix(in srgb, var(--fixit-accent) 18%, transparent);
+}
+
+.repair-nav-item.active {
+  color: var(--fixit-accent);
+  background: color-mix(in srgb, var(--fixit-accent) 12%, var(--fixit-surface-alt));
+  border-color: color-mix(in srgb, var(--fixit-accent) 28%, var(--fixit-border));
+  box-shadow: inset 3px 0 0 var(--repair-orange);
+}
+
+.repair-nav-item.active svg,
+.repair-nav-item:hover svg,
+.repair-eyebrow,
+.repair-hero-label,
+.repair-text-button,
+.repair-help-icon,
+.repair-sidebar-help button,
+.repair-device-choice.selected,
+.repair-device-choice:hover,
+.repair-stat-icon,
+.repair-device-icon,
+.repair-shop-avatar,
+.repair-round-arrow,
+.repair-location-input > svg,
+.repair-result-count,
+.repair-ai-mark,
+.repair-ai-mini-icon {
+  color: var(--repair-orange-light);
+}
+
+.repair-sidebar-help,
+.repair-ai-tips,
+.repair-ai-chat {
+  background: color-mix(in srgb, var(--fixit-accent) 6%, var(--fixit-surface));
+  border-color: var(--fixit-border);
+}
+
+.repair-main {
+  max-width: 1740px;
+  padding-top: 24px;
+}
+
+.repair-topbar {
+  position: relative;
+  border-color: var(--repair-border);
+}
+
+.repair-header-search {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: min(260px, 28vw);
+  min-height: 39px;
+  padding: 0 11px;
+  color: var(--repair-muted);
+  background: color-mix(in srgb, var(--fixit-surface) 88%, transparent);
+  border: 1px solid var(--repair-border);
+  border-radius: 9px;
+}
+
+.repair-header-search > svg {
+  flex: 0 0 auto;
+}
+
+.repair-header-search input {
+  min-height: 34px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.repair-demo-badge {
+  color: var(--fixit-accent);
+  background: color-mix(in srgb, var(--fixit-accent) 8%, transparent);
+  border-color: color-mix(in srgb, var(--fixit-accent) 24%, var(--fixit-border));
+}
+
+.repair-profile-menu-wrap {
+  position: relative;
+}
+
+.repair-profile-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 10px);
+  right: 0;
+  display: grid;
+  gap: 5px;
+  width: 210px;
+  padding: 12px;
+  color: var(--repair-text);
+  background: var(--fixit-surface);
+  border: 1px solid var(--repair-border);
+  border-radius: 10px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+.repair-profile-menu strong,
+.repair-profile-menu > span {
+  padding: 0 7px;
+}
+
+.repair-profile-menu > span {
+  margin-bottom: 7px;
+  color: var(--repair-muted);
+  font-size: 11px;
+}
+
+.repair-profile-menu button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 36px;
+  padding: 0 7px;
+  color: var(--repair-text);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  text-align: left;
+}
+
+.repair-profile-menu button:hover {
+  color: var(--fixit-accent);
+  background: color-mix(in srgb, var(--fixit-accent) 10%, transparent);
+}
+
+.repair-mobile-toggle {
+  display: none;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  color: var(--repair-text);
+  background: var(--fixit-surface);
+  border: 1px solid var(--repair-border);
+  border-radius: 8px;
+}
+
+.repair-welcome h1 span,
+.repair-page-heading h1 span {
+  color: var(--fixit-accent);
+  text-shadow: 0 0 28px color-mix(in srgb, var(--fixit-accent) 14%, transparent);
+}
+
+.repair-hero {
+  border-color: color-mix(in srgb, var(--fixit-accent) 26%, var(--fixit-border));
+  background:
+    radial-gradient(ellipse at 82% 47%, color-mix(in srgb, var(--fixit-accent) 14%, transparent), transparent 43%),
+    linear-gradient(112deg, color-mix(in srgb, var(--fixit-surface) 94%, transparent), color-mix(in srgb, var(--fixit-surface-alt) 90%, transparent) 57%, color-mix(in srgb, var(--fixit-accent) 12%, var(--fixit-surface)));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.repair-hero::before {
+  opacity: 0.1;
+}
+
+.repair-hero-copy h2 {
+  color: var(--repair-text);
+}
+
+.repair-hero-copy p,
+.repair-welcome p {
+  color: var(--repair-muted);
+}
+
+.repair-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.repair-hero-secondary {
+  margin-left: 7px;
+  color: var(--fixit-accent);
+  background: color-mix(in srgb, var(--fixit-bg) 35%, transparent);
+  border-color: color-mix(in srgb, var(--fixit-accent) 28%, var(--fixit-border));
+}
+
+.repair-button-primary {
+  color: var(--fixit-accent-foreground);
+  background: var(--fixit-accent);
+  border-color: color-mix(in srgb, var(--fixit-accent) 70%, var(--fixit-border));
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--fixit-accent) 16%, transparent);
+}
+
+.repair-button-primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--fixit-accent) 86%, var(--fixit-text));
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--fixit-accent) 24%, transparent);
+}
+
+.repair-button-light,
+.repair-outline-button,
+.repair-round-arrow {
+  color: var(--fixit-accent);
+  background-color: color-mix(in srgb, var(--fixit-accent) 8%, var(--fixit-surface));
+  border-color: color-mix(in srgb, var(--fixit-accent) 26%, var(--fixit-border));
+}
+
+.repair-button-selected {
+  color: var(--fixit-accent);
+}
+
+.repair-stat-card,
+.repair-panel,
+.repair-form-panel,
+.repair-quote-card,
+.repair-shop-card,
+.repair-ai-chat,
+.repair-ai-tips {
+  background: color-mix(in srgb, var(--fixit-surface) 92%, transparent);
+  border-color: var(--repair-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.repair-stat-card:hover,
+.repair-shop-card:hover,
+.repair-quote-card:hover {
+  border-color: color-mix(in srgb, var(--fixit-accent) 38%, var(--fixit-border));
+}
+
+.repair-category-section {
+  margin-top: 28px;
+}
+
+.repair-device-types {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.repair-category-section .repair-section-heading {
+  margin-top: 0;
+}
+
+.repair-category-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.repair-category-card {
+  display: grid;
+  grid-template-columns: 40px 1fr 16px;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  min-height: 70px;
+  padding: 12px;
+  color: var(--fixit-text);
+  background: color-mix(in srgb, var(--fixit-surface) 82%, transparent);
+  border: 1px solid var(--repair-border);
+  border-radius: 10px;
+  text-align: left;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.repair-category-card > span {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  color: var(--fixit-accent);
+  background: color-mix(in srgb, var(--fixit-accent) 12%, var(--fixit-surface));
+  border: 1px solid color-mix(in srgb, var(--fixit-accent) 20%, var(--fixit-border));
+  border-radius: 8px;
+}
+
+.repair-category-card > strong {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.repair-category-card > svg {
+  color: var(--repair-muted);
+}
+
+.repair-category-card:hover {
+  transform: translateY(-2px);
+  background: var(--fixit-surface-alt);
+  border-color: color-mix(in srgb, var(--fixit-accent) 40%, var(--fixit-border));
+}
+
+.repair-device-choice:hover,
+.repair-device-choice.selected {
+  color: var(--fixit-accent);
+  background: color-mix(in srgb, var(--fixit-accent) 10%, var(--fixit-surface));
+  border-color: color-mix(in srgb, var(--fixit-accent) 45%, var(--fixit-border));
+}
+
+.repair-app input:not([type="file"]),
+.repair-app select,
+.repair-app textarea,
+.repair-location-input {
+  color: var(--repair-text);
+  background-color: var(--fixit-bg);
+}
+
+.repair-app input::placeholder,
+.repair-app textarea::placeholder {
+  color: var(--fixit-muted);
+}
+
+.repair-status {
+  color: var(--fixit-accent);
+  background: color-mix(in srgb, var(--fixit-accent) 10%, var(--fixit-surface));
+  border-color: var(--fixit-border);
+}
+
+.repair-app input:not([type="file"]):focus,
+.repair-app select:focus,
+.repair-app textarea:focus {
+  border-color: var(--fixit-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fixit-accent) 12%, transparent);
+}
+
+.repair-live-map {
+  overflow: hidden;
+  border: 1px solid var(--repair-border);
+  border-radius: 12px;
+}
+
+.repair-live-map .leaflet-control-zoom a {
+  color: var(--fixit-text);
+  background: var(--fixit-surface);
+  border-color: var(--fixit-border);
+}
+
+.repair-live-map .leaflet-control-attribution {
+  color: var(--fixit-muted);
+  background: color-mix(in srgb, var(--fixit-surface) 90%, transparent);
+}
+
+.repair-live-map .leaflet-control-attribution a {
+  color: var(--fixit-accent);
+}
+
+.repair-ai-chat {
+  box-shadow: 0 20px 55px rgba(75, 37, 61, 0.13);
+}
+
+.repair-ai-mark {
+  background: color-mix(in srgb, var(--fixit-accent) 12%, var(--fixit-surface));
+  border-color: color-mix(in srgb, var(--fixit-accent) 24%, var(--fixit-border));
+  box-shadow: 0 0 25px color-mix(in srgb, var(--fixit-accent) 9%, transparent);
+}
+
+.repair-notice {
+  color: #C9E8D6;
+}
+
+.repair-status.status-progress {
+  color: var(--fixit-accent);
+  background: color-mix(in srgb, var(--fixit-accent) 12%, var(--fixit-surface));
+  border-color: color-mix(in srgb, var(--fixit-accent) 24%, var(--fixit-border));
+}
+
+@media (max-width: 1000px) {
+  .repair-category-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .repair-app {
+    overflow: visible;
+  }
+
+  .repair-sidebar {
+    position: relative;
+    z-index: 10;
+    display: block;
+    height: auto;
+    padding: 13px 15px;
+    background: var(--fixit-surface);
+    border-bottom: 1px solid var(--repair-border);
+  }
+
+  .repair-brand {
+    margin-bottom: 0;
+  }
+
+  .repair-side-label,
+  .repair-nav,
+  .repair-sidebar-help,
+  .repair-profile {
+    display: none;
+  }
+
+  .repair-sidebar.nav-open .repair-side-label {
+    display: block;
+    margin-top: 19px;
+  }
+
+  .repair-sidebar.nav-open .repair-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 12px;
+  }
+
+  .repair-sidebar.nav-open .repair-sidebar-help,
+  .repair-sidebar.nav-open .repair-profile {
+    display: flex;
+  }
+
+  .repair-main {
+    padding: 15px 17px 28px;
+  }
+
+  .repair-topbar {
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .repair-top-actions {
+    flex: 1 1 100%;
+    justify-content: flex-end;
+  }
+
+  .repair-header-search {
+    flex: 1;
+    width: auto;
+    max-width: 280px;
+    margin-right: auto;
+  }
+
+  .repair-mobile-toggle {
+    display: grid;
+  }
+
+  .repair-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .repair-top-actions {
+    gap: 7px;
+  }
+
+  .repair-demo-badge {
+    display: none;
+  }
+
+  .repair-category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .repair-hero-secondary {
+    margin: 9px 0 0;
   }
 }

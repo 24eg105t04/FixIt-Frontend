@@ -1,104 +1,49 @@
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { apiRequest, getAuthToken, saveAuthSession } from "./lib/api";
 
 const AuthContext = createContext(null);
 
-const ACCOUNTS_KEY = "fixit_demo_accounts";
-const USER_KEY = "fixit_user";
-
-function readAccounts() {
-  try {
-    const saved = localStorage.getItem(ACCOUNTS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  } catch {
-    return [];
-  }
-}
-
-function readSession() {
-  try {
-    return JSON.parse(sessionStorage.getItem(USER_KEY)) || null;
-  } catch {
-    return null;
-  }
-}
-
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(readSession);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(Boolean(getAuthToken()));
 
-  function register({ name, email, password, role }) {
-    const normalizedEmail = email.trim().toLowerCase();
-    const accounts = readAccounts();
+  useEffect(() => {
+    if (!getAuthToken()) return;
+    apiRequest("/api/auth/me")
+      .then(({ user: currentUser }) => setUser(currentUser))
+      .catch(() => {
+        saveAuthSession(null);
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
-    if (accounts.some((account) => account.email === normalizedEmail)) {
-      return {
-        success: false,
-        message: "An account with this email already exists. Please log in.",
-      };
-    }
-
-    // Demo only: passwords are stored in browser storage.
-    // Replace this with secure backend registration before real deployment.
-    const account = {
-      name: name.trim(),
-      email: normalizedEmail,
-      password,
-      role,
-    };
-
-    localStorage.setItem(ACCOUNTS_KEY, JSON.stringify([...accounts, account]));
-
-    const authenticatedUser = {
-      name: account.name,
-      email: account.email,
-      role: account.role,
-    };
-
-    sessionStorage.setItem(USER_KEY, JSON.stringify(authenticatedUser));
-    setUser(authenticatedUser);
-
-    return { success: true, user: authenticatedUser };
+  async function register(credentials) {
+    const result = await apiRequest("/api/auth/register", { method: "POST", body: credentials });
+    saveAuthSession(result.token);
+    setUser(result.user);
+    return { success: true, user: result.user };
   }
 
-  function login({ email, password }) {
-    const normalizedEmail = email.trim().toLowerCase();
-    const account = readAccounts().find(
-      (item) => item.email === normalizedEmail
-    );
-
-    if (!account) {
-      return {
-        success: false,
-        message: "No account found with this email. Please sign up first.",
-      };
-    }
-
-    if (account.password !== password) {
-      return {
-        success: false,
-        message: "Incorrect password. Please try again.",
-      };
-    }
-
-    const authenticatedUser = {
-      name: account.name,
-      email: account.email,
-      role: account.role,
-    };
-
-    sessionStorage.setItem(USER_KEY, JSON.stringify(authenticatedUser));
-    setUser(authenticatedUser);
-
-    return { success: true, user: authenticatedUser };
+  async function login(credentials) {
+    const result = await apiRequest("/api/auth/login", { method: "POST", body: credentials });
+    saveAuthSession(result.token);
+    setUser(result.user);
+    return { success: true, user: result.user };
   }
 
-  function logout() {
-    sessionStorage.removeItem(USER_KEY);
-    setUser(null);
+  async function logout() {
+    try {
+      if (getAuthToken()) await apiRequest("/api/auth/logout", { method: "POST" });
+    } finally {
+      saveAuthSession(null);
+      setUser(null);
+    }
   }
 
   return (
-    <AuthContext.Provider value={{ user, register, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, register, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

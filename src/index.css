@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -108,4 +110,268 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+:root {
+  --fixit-bg: #09080B;
+  --fixit-charcoal: #141117;
+  --fixit-panel: #1C1720;
+  --fixit-wine-ash: #32292F;
+  --fixit-burgundy: #4B253D;
+  --fixit-rose: #D889AD;
+  --fixit-text: #F8F4F7;
+  --fixit-muted: #B9AFBB;
+  --fixit-border: rgba(255, 255, 255, 0.10);
+  --bg: var(--fixit-bg);
+  --surface: var(--fixit-panel);
+  --surface-sunken: var(--fixit-charcoal);
+  --ink: var(--fixit-text);
+  --muted: var(--fixit-muted);
+  --border: var(--fixit-border);
+  --border-soft: var(--fixit-border);
+  --primary: var(--fixit-rose);
+  --primary-strong: var(--fixit-rose);
+  --primary-tint: rgba(216, 137, 173, 0.12);
+  --font-sans: 'DM Sans', 'Segoe UI', sans-serif;
+  --font-mono: 'Space Grotesk', 'Segoe UI', sans-serif;
+  color: var(--fixit-text);
+  color-scheme: dark;
+  background: var(--fixit-bg);
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+}
+
+html,
+body {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+  color: var(--fixit-text);
+  background: var(--fixit-bg);
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+}
+
+#root {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  border: 0;
+  text-align: left;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.fixit-app {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background: transparent;
+}
+
+.fixit-content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+.warp-gradient {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #09080B;
+}
+
+.warp-gradient-fallback,
+.warp-gradient-canvas,
+.warp-gradient-grain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.warp-gradient-fallback {
+  z-index: 0;
+}
+
+.warp-gradient-canvas {
+  z-index: 1;
+  display: block;
+  pointer-events: none;
+}
+
+.warp-gradient-grain {
+  z-index: 2;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.35'/%3E%3C/svg%3E");
+}
+
+
+/* Shared FixIt theme foundation */
+.fixit-theme-root {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background: var(--fixit-bg);
+  color: var(--fixit-text);
+}
+
+.fixit-theme-content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  color: var(--fixit-text);
+}
+
+/* Animated shader behind the interface */
+.fixit-shader-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fixit-shader-background canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Compact appearance control */
+.fixit-theme-menu {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.fixit-theme-trigger {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 13px;
+  border: 1px solid var(--fixit-border);
+  border-radius: 12px;
+  background: var(--fixit-surface);
+  color: var(--fixit-text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+
+.fixit-theme-trigger-dot {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--fixit-accent);
+  box-shadow: 0 0 12px var(--fixit-border);
+}
+
+.fixit-theme-current {
+  font-weight: 700;
+}
+
+.fixit-theme-dismiss {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
+.fixit-theme-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 2;
+  width: min(260px, calc(100vw - 32px));
+  padding: 10px;
+  border: 1px solid var(--fixit-border);
+  border-radius: 16px;
+  background: var(--fixit-surface);
+  color: var(--fixit-text);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.22);
+}
+
+.fixit-theme-dropdown-title {
+  padding: 8px 10px 12px;
+  color: var(--fixit-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.fixit-theme-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--fixit-text);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  font-size: 13px;
+}
+
+.fixit-theme-option:hover,
+.fixit-theme-option[aria-pressed="true"] {
+  border-color: var(--fixit-border);
+  background: var(--fixit-surface-alt);
+}
+
+.fixit-theme-swatches {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding-left: 3px;
+}
+
+.fixit-theme-swatches span {
+  width: 14px;
+  height: 14px;
+  margin-left: -3px;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  border-radius: 50%;
+}
+
+.fixit-theme-check {
+  margin-left: auto;
+  color: var(--fixit-accent);
+  font-weight: 800;
+}
+
+.fixit-theme-trigger:focus-visible,
+.fixit-theme-option:focus-visible {
+  outline: 2px solid var(--fixit-accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .fixit-theme-trigger {
+    gap: 6px;
+    padding: 9px;
+  }
+
+  .fixit-theme-current {
+    max-width: 95px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }

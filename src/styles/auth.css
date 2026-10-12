@@ -5,22 +5,19 @@
 ===================================================== */
 
 :root {
-  --fixit-cream: #15171C;
-  --fixit-offwhite: #0A0C10;
-  --fixit-white: #F5F7FA;
-  --fixit-charcoal: #F5F7FA;
-  --fixit-muted: #9CA5B3;
-  --fixit-border: rgba(255, 255, 255, 0.10);
-  --fixit-olive: #FF9A43;
-  --fixit-light-olive: #FFC080;
-  --fixit-dark-olive: #FF791A;
-
-  --fx-orange: #FF791A;
-  --fx-orange-bright: #FF9D4D;
-  --fx-orange-glow: rgba(255, 121, 26, 0.22);
-  --fx-panel: rgba(12, 14, 19, 0.78);
-  --fx-card: rgba(19, 22, 29, 0.91);
-  --fx-line: rgba(255, 255, 255, 0.09);
+  --fixit-cream: var(--fixit-surface-alt);
+  --fixit-offwhite: var(--fixit-bg);
+  --fixit-white: var(--fixit-text);
+  --fixit-charcoal: var(--fixit-surface);
+  --fixit-olive: var(--fixit-accent);
+  --fixit-light-olive: var(--fixit-accent);
+  --fixit-dark-olive: var(--fixit-accent);
+  --fx-orange: var(--fixit-accent);
+  --fx-orange-bright: var(--fixit-accent);
+  --fx-orange-glow: color-mix(in srgb, var(--fixit-accent) 18%, transparent);
+  --fx-panel: var(--fixit-surface);
+  --fx-card: var(--fixit-surface-alt);
+  --fx-line: var(--fixit-border);
 }
 
 /* ---------- Global auth layout ---------- */
@@ -748,4 +745,110 @@
   .auth-submit:hover:not(:disabled) {
     transform: none;
   }
+}
+
+.auth-page {
+  color: var(--fixit-text);
+  background: transparent;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+}
+
+.auth-intro {
+  background: color-mix(in srgb, var(--fixit-surface) 72%, transparent);
+  border-color: var(--fixit-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.auth-form-section {
+  background: color-mix(in srgb, var(--fixit-bg) 72%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.auth-brand-icon {
+  color: var(--fixit-text);
+  background: var(--fixit-accent);
+  border-color: var(--fixit-border);
+  box-shadow: 0 0 25px color-mix(in srgb, var(--fixit-accent) 18%, transparent);
+}
+
+.auth-intro h1 span,
+.auth-eyebrow,
+.auth-form-section a,
+.auth-link,
+.auth-role-card.selected,
+.auth-role-card.active {
+  color: var(--fixit-accent);
+}
+
+.auth-submit {
+  color: var(--fixit-accent-foreground);
+  background: var(--fixit-accent);
+  border-color: var(--fixit-border);
+}
+
+.auth-submit:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--fixit-accent) 86%, var(--fixit-text));
+}
+
+.auth-input:focus,
+.auth-role-card.selected,
+.auth-role-card.active {
+  border-color: var(--fixit-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fixit-accent) 10%, transparent);
+}
+
+.auth-intro::before,
+.auth-form-section::before {
+  background: radial-gradient(ellipse at 75% 24%, color-mix(in srgb, var(--fixit-accent) 12%, transparent), transparent 58%);
+  animation: none;
+}
+
+.auth-form-wrap {
+  color: var(--fixit-text);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--fixit-surface) 96%, transparent), color-mix(in srgb, var(--fixit-bg) 96%, transparent)) padding-box,
+    linear-gradient(135deg, color-mix(in srgb, var(--fixit-accent) 48%, transparent), var(--fixit-border) 72%, color-mix(in srgb, var(--fixit-accent) 28%, transparent)) border-box;
+  box-shadow: 0 25px 80px color-mix(in srgb, var(--fixit-bg) 48%, transparent), 0 0 45px color-mix(in srgb, var(--fixit-accent) 8%, transparent);
+}
+
+.auth-intro h1,
+.auth-intro h1 span,
+.auth-form-wrap h1,
+.auth-form-wrap h2,
+.auth-role-option,
+.auth-role-option strong {
+  color: var(--fixit-text);
+}
+
+.auth-intro h1 span,
+.auth-role-option.active,
+.auth-benefits svg,
+.auth-password-toggle:hover {
+  color: var(--fixit-accent);
+}
+
+.auth-role-option,
+.auth-input {
+  color: var(--fixit-text);
+  background: color-mix(in srgb, var(--fixit-bg) 78%, transparent);
+  border-color: var(--fixit-border);
+}
+
+.auth-role-option.active {
+  background: color-mix(in srgb, var(--fixit-accent) 10%, var(--fixit-surface));
+  border-color: var(--fixit-accent);
+}
+
+.auth-input::placeholder,
+.auth-role-option small,
+.auth-footer-note {
+  color: var(--fixit-muted);
+}
+
+.auth-input:focus {
+  background: color-mix(in srgb, var(--fixit-accent) 5%, var(--fixit-bg));
+  border-color: var(--fixit-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fixit-accent) 10%, transparent);
 }

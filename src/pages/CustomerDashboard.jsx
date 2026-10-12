@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import FixItThemeSwitcher from "../components/ui/FixItThemeSwitcher";
+import { apiRequest } from "../lib/api";
 
 import {
 
@@ -8,9 +10,9 @@ import {
 
   Upload, Smartphone, Laptop, Tablet, ArrowRight, Clock,
 
-  CheckCircle2, CircleDollarSign, Navigation, Star, Send,
+  CheckCircle2, Navigation, Send,
 
-  ImagePlus, ShieldCheck, X, MessageCircle, Lightbulb,
+  ImagePlus, ShieldCheck, X, Lightbulb, Headphones, Menu, UserRound,
 
 } from "lucide-react";
 
@@ -40,178 +42,29 @@ import L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
 
-const initialRequests = [
-
-  {
-
-    id: "FX-1024",
-
-    device: "iPhone",
-
-    issue: "Cracked screen",
-
-    status: "Quotes received",
-
-    quotes: 3,
-
-    date: "Today",
-
-  },
-
-  {
-
-    id: "FX-1018",
-
-    device: "Laptop",
-
-    issue: "Not turning on",
-
-    status: "In progress",
-
-    quotes: 2,
-
-    date: "Yesterday",
-
-  },
-
-];
-
-const shops = [
-
-  {
-
-    id: 1,
-
-    name: "TechCare Repairs",
-
-    specialty: "Phones · Laptops",
-
-    distance: "1.2 km",
-
-    rating: "4.8",
-
-    time: "30–60 min",
-
-    price: "₹",
-
-  },
-
-  {
-
-    id: 2,
-
-    name: "FixPoint Electronics",
-
-    specialty: "Screens · Batteries",
-
-    distance: "2.4 km",
-
-    rating: "4.6",
-
-    time: "1–2 hours",
-
-    price: "₹₹",
-
-  },
-
-  {
-
-    id: 3,
-
-    name: "Device Doctor",
-
-    specialty: "Laptop · Hardware",
-
-    distance: "3.1 km",
-
-    rating: "4.7",
-
-    time: "Same-day service",
-
-    price: "₹₹",
-
-  },
-
-];
-
-const initialQuotes = [
-
-  {
-
-    id: 1,
-
-    shop: "TechCare Repairs",
-
-    issue: "iPhone screen replacement",
-
-    price: 2499,
-
-    time: "2 hours",
-
-    warranty: "90-day warranty",
-
-    rating: "4.8",
-
-  },
-
-  {
-
-    id: 2,
-
-    shop: "FixPoint Electronics",
-
-    issue: "iPhone screen replacement",
-
-    price: 2199,
-
-    time: "4 hours",
-
-    warranty: "30-day warranty",
-
-    rating: "4.6",
-
-  },
-
-  {
-
-    id: 3,
-
-    shop: "Device Doctor",
-
-    issue: "iPhone screen replacement",
-
-    price: 2799,
-
-    time: "1 hour",
-
-    warranty: "180-day warranty",
-
-    rating: "4.7",
-
-  },
-
-];
-
 const navigation = [
-
-  { id: "overview", label: "Overview", icon: LayoutDashboard },
-
-  { id: "report", label: "Report a device", icon: Camera },
-
-  { id: "nearby", label: "Nearby repair shops", icon: MapPin },
-
-  { id: "quotes", label: "Compare quotes", icon: GitCompare },
-
-  { id: "ai", label: "FixIt AI", icon: BrainCircuit },
-
-  { id: "repairs", label: "My repairs", icon: ClipboardCheck },
-
+  { id: "overview", label: "Dashboard", icon: LayoutDashboard },
+  { id: "report", label: "Post a Repair", icon: Camera },
+  { id: "nearby", label: "Find Shops", icon: MapPin },
+  { id: "repairs", label: "My Requests", icon: ClipboardCheck },
+  { id: "ai", label: "AI Repair Assistant", icon: BrainCircuit },
+  { id: "quotes", label: "Compare Bids", icon: GitCompare },
+  { id: "youfix", label: "Repair Guides", icon: Wrench },
 ];
 
 function money(amount) {
 
   return `₹${amount.toLocaleString("en-IN")}`;
 
+}
+
+function fileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error("Unable to read the selected image."));
+    reader.readAsDataURL(file);
+  });
 }
 
 // Approximate starting view for Jodimetla; Search area geocodes the exact locality.
@@ -282,8 +135,19 @@ export default function CustomerDashboard() {
   const navigate = useNavigate();
 
   const [active, setActive] = useState("overview");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [headerSearch, setHeaderSearch] = useState("");
 
-  const [requests, setRequests] = useState(initialRequests);
+  const [requests, setRequests] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [publicShops, setPublicShops] = useState([]);
+  const [quotes, setQuotes] = useState([]);
+  const [selectedRequestId, setSelectedRequestId] = useState("");
+  const [dataLoading, setDataLoading] = useState(true);
+  const [dataError, setDataError] = useState("");
+  const [quotesLoading, setQuotesLoading] = useState(false);
+  const [quoteError, setQuoteError] = useState("");
 
   const [deviceType, setDeviceType] = useState("Phone");
 
@@ -329,11 +193,54 @@ export default function CustomerDashboard() {
 
   const name = user?.name || "there";
 
+  React.useEffect(() => {
+    if (active !== "quotes" || !selectedRequestId) return undefined;
+    const refresh = async () => {
+      try {
+        const result = await apiRequest(`/api/marketplace/requests/${encodeURIComponent(selectedRequestId)}/bids`);
+        setQuotes((result.bids || []).map((bid) => ({
+          ...bid,
+          shopDetails: bid.shop,
+          shop: bid.shop.shopName,
+          issue: bid.notes || "Repair proposal",
+          time: `${bid.estimatedHours} hours`,
+        })));
+        setQuoteError("");
+      } catch (error) {
+        setQuoteError(error.message || "Unable to refresh bids.");
+      }
+    };
+    const interval = window.setInterval(refresh, 15000);
+    return () => window.clearInterval(interval);
+  }, [active, selectedRequestId]);
+
+  React.useEffect(() => {
+    let mounted = true;
+    Promise.all([
+      apiRequest("/api/marketplace/requests/mine"),
+      apiRequest("/api/marketplace/jobs/mine"),
+      apiRequest("/api/marketplace/shops"),
+    ]).then(([requestData, jobData, shopData]) => {
+      if (!mounted) return;
+      setRequests(requestData.requests || []);
+      setJobs(jobData.jobs || []);
+      setPublicShops(shopData.shops || []);
+      setDataError("");
+    }).catch((error) => {
+      if (mounted) setDataError(error.message || "Unable to load your FixIt marketplace data.");
+    }).finally(() => {
+      if (mounted) setDataLoading(false);
+    });
+    return () => { mounted = false; };
+  }, []);
+
   function changeSection(section) {
 
     setActive(section);
 
     setNotice("");
+
+    setMobileNavOpen(false);
 
     window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -345,6 +252,44 @@ export default function CustomerDashboard() {
 
     navigate("/login", { replace: true });
 
+  }
+
+  function chooseDeviceCategory(category) {
+    setDeviceType(category);
+    setIssue("");
+    changeSection("report");
+  }
+
+  async function loadBidsForRequest(requestId) {
+    if (!requestId) {
+      setSelectedRequestId("");
+      setQuotes([]);
+      setSelectedQuote(null);
+      setQuoteError("");
+      return;
+    }
+    setSelectedRequestId(requestId);
+    setQuotes([]);
+    setSelectedQuote(null);
+    setQuoteError("");
+    setQuotesLoading(true);
+    try {
+      const result = await apiRequest(`/api/marketplace/requests/${encodeURIComponent(requestId)}/bids`);
+      setQuotes((result.bids || []).map((bid) => ({
+        ...bid,
+        shopDetails: bid.shop,
+        shop: bid.shop.shopName,
+        issue: bid.notes || "Repair proposal",
+        time: `${bid.estimatedHours} hours`,
+      })));
+      setActive("quotes");
+      setNotice("");
+    } catch (error) {
+      setQuoteError(error.message || "Unable to load bids for this request.");
+      setActive("quotes");
+    } finally {
+      setQuotesLoading(false);
+    }
   }
 
   function handlePhoto(event) {
@@ -375,60 +320,40 @@ export default function CustomerDashboard() {
 
   }
 
-  function submitRepair(event) {
-
+  async function submitRepair(event) {
     event.preventDefault();
-
     if (!deviceType || !issue.trim() || !location.trim()) {
-
       setNotice("Please select a device, choose an issue, and enter your locality.");
-
       return;
-
     }
 
-    const request = {
-
-      id: `FX-${Math.floor(1000 + Math.random() * 9000)}`,
-
-      device: `${deviceBrand.trim()} ${deviceType}`.trim(),
-
-      issue: issue.trim(),
-
-      status: "Request submitted",
-
-      quotes: 0,
-
-      date: "Just now",
-
-      description,
-
-      location,
-
-      model: deviceModel,
-
-      photoName: photo?.name || "",
-
-    };
-
-    setRequests((previous) => [request, ...previous]);
-
-    setDeviceBrand("");
-
-    setDeviceModel("");
-
-    setIssue("");
-
-    setDescription("");
-
-    setLocation("");
-
-    setPhoto(null);
-
-    setNotice("Your demo repair request has been created.");
-
-    setActive("repairs");
-
+    setDataError("");
+    try {
+      const photos = photo ? [await fileAsDataUrl(photo)] : [];
+      const { request } = await apiRequest("/api/marketplace/requests", {
+        method: "POST",
+        body: {
+          deviceCategory: deviceType,
+          brand: deviceBrand.trim(),
+          model: deviceModel.trim(),
+          issue: issue.trim(),
+          description: description.trim(),
+          location: location.trim(),
+          photos,
+        },
+      });
+      setRequests((previous) => [request, ...previous]);
+      setDeviceBrand("");
+      setDeviceModel("");
+      setIssue("");
+      setDescription("");
+      setLocation("");
+      setPhoto(null);
+      setNotice("Your repair request is now open to eligible repair shops.");
+      setActive("repairs");
+    } catch (error) {
+      setNotice(error.message || "Unable to submit your repair request.");
+    }
   }
 
 async function askAI(event) {
@@ -451,29 +376,7 @@ async function askAI(event) {
 
   try {
 
-    const response = await fetch(
-
-      "http://localhost:8080/api/ai/chat",
-
-      {
-
-        method: "POST",
-
-        headers: { "Content-Type": "application/json" },
-
-        body: JSON.stringify({ question }),
-
-      }
-
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-
-      throw new Error(data.error || "AI service unavailable.");
-
-    }
+    const data = await apiRequest("/api/ai/chat", { method: "POST", body: { question } });
 
     setAiMessages((previous) => [
 
@@ -503,12 +406,18 @@ async function askAI(event) {
 
 }
 
-  function acceptQuote(quote) {
-
-    setSelectedQuote(quote);
-
-    setNotice(`Demo selection: ${quote.shop}. No real booking has been made.`);
-
+  async function acceptQuote(quote) {
+    try {
+      const result = await apiRequest(`/api/marketplace/bids/${encodeURIComponent(quote.id)}/accept`, { method: "POST" });
+      setSelectedQuote(quote);
+      const { jobs: currentJobs } = await apiRequest("/api/marketplace/jobs/mine");
+      setJobs(currentJobs || []);
+      setRequests((previous) => previous.map((request) => request.id === selectedRequestId ? { ...request, status: "ACCEPTED" } : request));
+      setNotice(`Bid accepted. Repair ${result.job.id} is now assigned to ${quote.shop || "the selected shop"}.`);
+      setQuotes((previous) => previous.map((bid) => ({ ...bid, status: bid.id === quote.id ? "ACCEPTED" : "REJECTED" })));
+    } catch (error) {
+      setNotice(error.message || "Unable to accept this bid.");
+    }
   }
 
   async function fetchShopsForCoordinates(center) {
@@ -650,11 +559,16 @@ async function askAI(event) {
     return shop.type === "electronics" || shop.type === "electronics_repair";
   });
 
+  const matchingRequests = requests.filter((request) =>
+    `${request.id} ${request.device} ${request.issue} ${request.status}`
+      .toLowerCase().includes(headerSearch.trim().toLowerCase())
+  );
+
   return (
 
     <div className="repair-app">
 
-      <aside className="repair-sidebar">
+      <aside className={`repair-sidebar ${mobileNavOpen ? "nav-open" : ""}`}>
 
         <a className="repair-brand" href="#overview" onClick={(event) => {
 
@@ -686,7 +600,13 @@ async function askAI(event) {
 
                 className={`repair-nav-item ${active === item.id ? "active" : ""}`}
 
-                onClick={() => changeSection(item.id)}
+                onClick={() => {
+  if (item.id === "youfix") {
+    navigate("/youfix");
+  } else {
+    changeSection(item.id);
+  }
+}}
 
               >
 
@@ -764,15 +684,51 @@ async function askAI(event) {
 
           <div className="repair-top-actions">
 
+            <label className="repair-header-search">
+              <Search size={17} />
+              <input
+                aria-label="Search repair requests"
+                value={headerSearch}
+                onChange={(event) => setHeaderSearch(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") changeSection("repairs");
+                }}
+                placeholder="Search requests"
+              />
+            </label>
+             <FixItThemeSwitcher />
             <span className="repair-demo-badge"><span /> FRONTEND DEMO</span>
 
-            <button className="repair-icon-button" title="Notifications">
+            <button className="repair-icon-button" title="Notifications" onClick={() => setNotice("You’re all caught up. Notifications will appear here when repair updates are connected.")}>
 
               <Bell size={19} />
 
             </button>
 
-            <div className="repair-top-avatar">{name.charAt(0).toUpperCase()}</div>
+            <div className="repair-profile-menu-wrap">
+              <button
+                className="repair-top-avatar"
+                type="button"
+                aria-label="Open profile menu"
+                aria-expanded={profileMenuOpen}
+                onClick={() => setProfileMenuOpen((open) => !open)}
+              >{name.charAt(0).toUpperCase()}</button>
+              {profileMenuOpen && (
+                <div className="repair-profile-menu">
+                  <strong>{name}</strong>
+                  <span>Customer account</span>
+                  <button type="button" onClick={() => { setNotice("Account settings are managed by your FixIt profile."); setProfileMenuOpen(false); }}><UserRound size={15} /> Settings</button>
+                  <button type="button" onClick={handleLogout}><LogOut size={15} /> Log out</button>
+                </div>
+              )}
+            </div>
+            <button
+              type="button"
+              className="repair-mobile-toggle"
+              aria-label={mobileNavOpen ? "Close navigation" : "Open navigation"}
+              aria-expanded={mobileNavOpen}
+              onClick={() => setMobileNavOpen((open) => !open)}
+            >{mobileNavOpen ? <X size={20} /> : <Menu size={20} />}</button>
 
           </div>
 
@@ -792,6 +748,8 @@ async function askAI(event) {
 
         )}
 
+        {dataError && <div className="repair-data-state" role="alert">{dataError}</div>}
+
         {active === "overview" && (
 
           <section className="repair-content">
@@ -802,9 +760,9 @@ async function askAI(event) {
 
                 <span className="repair-eyebrow">YOUR DEVICE CARE, SIMPLIFIED</span>
 
-                <h1>Let's get things <span>working again.</span></h1>
+                <h1>Your Devices Deserve <span>a Second Life.</span></h1>
 
-                <p>Good to see you, {name}. What needs fixing today?</p>
+                <p>Good to see you, {name}. Get clear repair options, compare local expertise, and make your next move with confidence.</p>
 
               </div>
 
@@ -816,16 +774,19 @@ async function askAI(event) {
 
               <div className="repair-hero-copy">
 
-                <span className="repair-hero-label">NEED A REPAIR?</span>
+                <span className="repair-hero-label">CARE THAT KEEPS YOU CONNECTED</span>
 
-                <h2>Your device deserves<br />a second chance.</h2>
+                <h2>Make repair the<br />smarter next step.</h2>
 
                 <p>Describe the issue, connect with nearby experts, and compare repair offers in one place.</p>
 
                 <button className="repair-button repair-button-light" onClick={() => changeSection("report")}>
 
-                  Report a damaged device <ArrowRight size={17} />
+                  Post a Repair <ArrowRight size={17} />
 
+                </button>
+                <button className="repair-button repair-button-light repair-hero-secondary" onClick={() => changeSection("nearby")}>
+                  Explore Repair Shops <MapPin size={16} />
                 </button>
 
               </div>
@@ -851,6 +812,27 @@ async function askAI(event) {
               </div>
 
             </div>
+
+            <section className="repair-category-section" aria-labelledby="repair-categories-title">
+              <div className="repair-section-heading">
+                <div><h2 id="repair-categories-title">What needs a little care?</h2><p>Choose a device to start a repair request.</p></div>
+              </div>
+              <div className="repair-category-grid">
+                {[
+                  { name: "Phones", type: "Phone", Icon: Smartphone },
+                  { name: "Laptops", type: "Laptop", Icon: Laptop },
+                  { name: "Tablets", type: "Tablet", Icon: Tablet },
+                  { name: "Headphones", type: "Headphones", Icon: Headphones },
+                  { name: "Other Gadgets", type: "Other gadgets", Icon: Wrench },
+                ].map(({ name: categoryName, type, Icon }) => (
+                  <button key={type} className="repair-category-card" onClick={() => chooseDeviceCategory(type)}>
+                    <span><Icon size={21} /></span>
+                    <strong>{categoryName}</strong>
+                    <ArrowRight size={15} />
+                  </button>
+                ))}
+              </div>
+            </section>
 
             <div className="repair-section-heading">
 
@@ -904,7 +886,7 @@ async function askAI(event) {
 
                 <span className="repair-stat-label">Nearby shops</span>
 
-                <strong>{shops.length}</strong>
+                <strong>{publicShops.length}</strong>
 
                 <small>Sample local listings</small>
 
@@ -926,7 +908,7 @@ async function askAI(event) {
 
                 <div className="repair-request-list">
 
-                  {requests.slice(0, 3).map((request) => (
+                  {matchingRequests.slice(0, 3).map((request) => (
 
                     <div className="repair-request-row" key={request.id}>
 
@@ -960,13 +942,13 @@ async function askAI(event) {
 
                 <div className="repair-panel-heading">
 
-                  <div><h3>Repair shops near you</h3><p>Explore sample repair providers.</p></div>
+                  <div><h3>Repair shops near you</h3><p>Explore published FixIt shop profiles.</p></div>
 
                   <button className="repair-round-arrow" onClick={() => changeSection("nearby")}><ArrowRight size={17} /></button>
 
                 </div>
 
-                {shops.slice(0, 2).map((shop) => (
+                {publicShops.slice(0, 2).map((shop) => (
 
                   <div className="repair-mini-shop" key={shop.id}>
 
@@ -974,13 +956,13 @@ async function askAI(event) {
 
                     <div className="repair-mini-shop-info">
 
-                      <strong>{shop.name}</strong>
+                      <strong>{shop.shopName}</strong>
 
-                      <span>{shop.specialty}</span>
+                      <span>{shop.categories.join(" · ") || shop.address}</span>
 
                     </div>
 
-                    <span className="repair-rating"><Star size={13} fill="currentColor" /> {shop.rating}</span>
+                    <a className="repair-shop-profile-link" href={`/shops/${shop.sellerId}`} aria-label={`View ${shop.shopName} profile`}><ArrowRight size={15} /></a>
 
                   </div>
 
@@ -1028,7 +1010,9 @@ async function askAI(event) {
 
                   { name: "Tablet", Icon: Tablet },
 
-                  { name: "Other", Icon: Wrench },
+                  { name: "Headphones", Icon: Headphones },
+
+                  { name: "Other gadgets", Icon: Wrench },
 
                 ].map(({ name, Icon }) => (
 
@@ -1157,6 +1141,27 @@ async function askAI(event) {
                         "Wi-Fi or connectivity problem",
 
                         "Other tablet issue",
+
+                      ]
+
+                    : deviceType === "Headphones"
+                    ? [
+
+                        "No sound or distorted audio",
+
+                        "Battery not holding charge",
+
+                        "Bluetooth pairing problem",
+
+                        "Microphone not working",
+
+                        "Broken cable or connector",
+
+                        "Damaged ear cushion or headband",
+
+                        "Headphones not turning on",
+
+                        "Other headphone issue",
 
                       ]
 
@@ -1431,7 +1436,12 @@ async function askAI(event) {
 
             <div className="repair-quote-filter">
 
-              <span>Quotes for: <strong>iPhone screen replacement</strong></span>
+              <label>Compare bids for
+                <select value={selectedRequestId} onChange={(event) => loadBidsForRequest(event.target.value)}>
+                  <option value="">Select one of your repair requests</option>
+                  {requests.map((request) => <option key={request.id} value={request.id}>{request.brand} {request.deviceCategory} {request.model} · {request.issue}</option>)}
+                </select>
+              </label>
 
               <select value={quoteFilter} onChange={(e) => setQuoteFilter(e.target.value)}>
 
@@ -1444,12 +1454,17 @@ async function askAI(event) {
                 <option>Longest warranty</option>
 
               </select>
+              <button className="repair-outline-button" type="button" onClick={() => loadBidsForRequest(selectedRequestId)} disabled={!selectedRequestId || quotesLoading}>Refresh bids</button>
 
             </div>
 
             <div className="repair-quote-list">
 
-              {[...initialQuotes]
+              {quotesLoading && <p className="repair-data-state">Loading bids…</p>}
+              {quoteError && <p className="repair-data-state" role="alert">{quoteError}</p>}
+              {!quotesLoading && selectedRequestId && quotes.length === 0 && <p className="repair-data-state">No bids yet. Repair shops can respond while this request is open.</p>}
+              {!quotesLoading && !selectedRequestId && <p className="repair-data-state">Choose one of your repair requests to compare its bids.</p>}
+              {[...quotes]
 
                 .sort((a, b) => {
 
@@ -1457,7 +1472,7 @@ async function askAI(event) {
 
                   if (quoteFilter === "Fastest repair") return parseInt(a.time) - parseInt(b.time);
 
-                  if (quoteFilter === "Longest warranty") return parseInt(b.warranty) - parseInt(a.warranty);
+                  if (quoteFilter === "Longest warranty") return (parseInt(b.warranty, 10) || 0) - (parseInt(a.warranty, 10) || 0);
 
                   return a.price - b.price;
 
@@ -1471,7 +1486,7 @@ async function askAI(event) {
 
                       <div className="repair-shop-avatar"><Wrench size={21} /></div>
 
-                      <div><h3>{quote.shop}</h3><p>{quote.issue}</p><span className="repair-rating"><Star size={13} fill="currentColor" /> {quote.rating} sample rating</span></div>
+                      <div><h3>{quote.shop}</h3><p>{quote.issue}</p><span className="repair-rating">{quote.shopDetails.experienceYears} years of experience · {quote.shopDetails.address}</span></div>
 
                     </div>
 
@@ -1479,11 +1494,17 @@ async function askAI(event) {
 
                     <div className="repair-quote-detail"><span>Estimated time</span><strong><Clock size={15} /> {quote.time}</strong></div>
 
-                    <div className="repair-quote-detail"><span>Warranty</span><strong><ShieldCheck size={15} /> {quote.warranty}</strong></div>
+                    <div className="repair-quote-detail"><span>Parts required</span><strong>{quote.partsRequired.length ? quote.partsRequired.join(", ") : "Not specified"}</strong></div>
 
-                    <button className={selectedQuote?.id === quote.id ? "repair-button repair-button-selected" : "repair-button repair-button-primary"} onClick={() => acceptQuote(quote)}>
+                    <div className="repair-quote-detail"><span>Warranty</span><strong><ShieldCheck size={15} /> {quote.warranty || quote.shopDetails.warrantyPolicy || "Not specified"}</strong></div>
 
-                      {selectedQuote?.id === quote.id ? "Selected for demo" : "Select offer"}
+                    <a className="repair-shop-profile-link" href={`/shops/${quote.sellerId}`}>View shop profile <ArrowRight size={14} /></a>
+
+                    <div className="repair-quote-contact">{quote.shopDetails.phone && <a href={`tel:${quote.shopDetails.phone}`}>{quote.shopDetails.phone}</a>}{quote.shopDetails.publicEmail && <a href={`mailto:${quote.shopDetails.publicEmail}`}>{quote.shopDetails.publicEmail}</a>}</div>
+
+                    <button disabled={quote.status !== "SUBMITTED"} className={selectedQuote?.id === quote.id ? "repair-button repair-button-selected" : "repair-button repair-button-primary"} onClick={() => acceptQuote(quote)}>
+
+                      {selectedQuote?.id === quote.id ? "Accepted" : quote.status === "SUBMITTED" ? "Accept bid" : quote.status}
 
                     </button>
 
@@ -1493,7 +1514,7 @@ async function askAI(event) {
 
             </div>
 
-            <p className="repair-disclaimer">All quotes and ratings shown here are fictional examples for the frontend demo. Selecting an offer does not make a real booking.</p>
+            <p className="repair-disclaimer">Bids are submitted by registered repair shops. Accepting one assigns the repair and starts its tracked job history.</p>
 
           </section>
 
@@ -1587,7 +1608,7 @@ async function askAI(event) {
 
               <h1>Every repair, <span>in one place.</span></h1>
 
-              <p>Review submitted requests and follow their demo status.</p>
+              <p>Review requests and follow each accepted repair through its status history.</p>
 
             </div>
 
@@ -1595,9 +1616,9 @@ async function askAI(event) {
 
               <div><span>All requests</span><strong>{requests.length}</strong></div>
 
-              <div><span>In progress</span><strong>{requests.filter((r) => r.status === "In progress").length}</strong></div>
+              <div><span>In progress</span><strong>{jobs.filter((job) => ["IN_PROGRESS", "WAITING_FOR_PARTS", "READY_FOR_PICKUP"].includes(job.status)).length}</strong></div>
 
-              <div><span>Awaiting quotes</span><strong>{requests.filter((r) => r.status === "Request submitted").length}</strong></div>
+              <div><span>Awaiting bids</span><strong>{requests.filter((r) => r.status === "OPEN").length}</strong></div>
 
             </div>
 
@@ -1605,13 +1626,13 @@ async function askAI(event) {
 
               <div className="repair-panel-heading">
 
-                <div><h3>Your repair requests</h3><p>Requests created in this browser session.</p></div>
+                <div><h3>Your repair requests</h3><p>Requests saved to your FixIt account.</p></div>
 
                 <button className="repair-button repair-button-primary" onClick={() => changeSection("report")}><Camera size={16} /> New request</button>
 
               </div>
 
-              {requests.length === 0 ? (
+              {dataLoading ? <p className="repair-data-state">Loading your requests…</p> : requests.length === 0 ? (
 
                 <div className="repair-empty"><ClipboardCheck size={35} /><h3>No repair requests yet</h3><p>Report a damaged device to start your repair journey.</p><button className="repair-button repair-button-primary" onClick={() => changeSection("report")}>Report a device</button></div>
 
@@ -1625,19 +1646,19 @@ async function askAI(event) {
 
                     <tbody>
 
-                      {requests.map((request) => (
+                      {matchingRequests.map((request) => (
 
                         <tr key={request.id}>
 
                           <td><strong>{request.id}</strong></td>
 
-                          <td><strong>{request.device}</strong><span>{request.issue}</span></td>
+                          <td><strong>{[request.brand, request.deviceCategory, request.model].filter(Boolean).join(" ")}</strong><span>{request.issue}</span></td>
 
-                          <td><span className={`repair-status ${request.status === "In progress" ? "status-progress" : ""}`}>{request.status}</span></td>
+                          <td><span className={`repair-status ${request.status !== "OPEN" ? "status-progress" : ""}`}>{request.status.replaceAll("_", " ")}</span></td>
 
-                          <td>{request.quotes}</td>
+                          <td><button className="repair-text-button" onClick={() => loadBidsForRequest(request.id)}>{request.bids || 0} · Compare</button></td>
 
-                          <td>{request.date}</td>
+                          <td>{new Date(`${request.createdAt}Z`).toLocaleDateString()}</td>
 
                         </tr>
 
@@ -1653,7 +1674,22 @@ async function askAI(event) {
 
             </div>
 
-            <div className="repair-privacy-note"><ShieldCheck size={18} /><p><strong>Demo mode:</strong> requests are held in frontend state and reset when the page reloads. Persistent requests and real shop notifications will require the Java backend and MySQL.</p></div>
+            {jobs.length > 0 && (
+              <div className="repair-active-jobs">
+                <div className="repair-section-heading"><div><h2>Assigned repairs</h2><p>Live status and progress history from your repair shop.</p></div></div>
+                {jobs.map((job) => (
+                  <article className="repair-job-card" key={job.id}>
+                    <div className="repair-panel-heading">
+                      <div><h3>{job.request.brand} {job.request.deviceCategory} {job.request.model}</h3><p>{job.request.issue} · {job.request.location}</p></div>
+                      <span className="repair-status status-progress">{job.status.replaceAll("_", " ")}</span>
+                    </div>
+                    <div className="repair-job-shop"><strong>{job.shop.shopName}</strong><span>{job.shop.address}</span><a href={`/shops/${job.sellerId}`}>Shop profile</a>{job.shop.phone && <a href={`tel:${job.shop.phone}`}>{job.shop.phone}</a>}{job.shop.publicEmail && <a href={`mailto:${job.shop.publicEmail}`}>{job.shop.publicEmail}</a>}</div>
+                    <ol className="repair-job-history">{job.history.map((entry) => <li key={`${entry.createdAt}-${entry.toStatus}`}><strong>{entry.toStatus.replaceAll("_", " ")}</strong><time>{new Date(`${entry.createdAt}Z`).toLocaleString()}</time>{entry.note && <p>{entry.note}</p>}</li>)}</ol>
+                  </article>
+                ))}
+              </div>
+            )}
+            <div className="repair-privacy-note"><ShieldCheck size={18} /><p>Requests and repair updates are stored with your FixIt account. Private account credentials are not shown on public shop profiles.</p></div>
 
           </section>
 

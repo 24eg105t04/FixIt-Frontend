@@ -5,11 +5,14 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import SellerDashboard from "./pages/SellerDashboard";
-import WorkbenchBackground from "./components/WorkbenchBackground";
 import NearbyShops from "./NearbyShops";
+import YouFix from "./pages/YouFix";
+import ShopProfile from "./pages/ShopProfile";
 
 function HomeRedirect() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) return <div className="route-loading" role="status">Checking your FixIt session…</div>;
 
   if (!user) return <Navigate to="/login" replace />;
 
@@ -26,7 +29,9 @@ function HomeRedirect() {
 }
 
 function ProtectedRoute({ children, role }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) return <div className="route-loading" role="status">Checking your FixIt session…</div>;
 
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -54,6 +59,7 @@ function AppRoutes() {
       <Route path="/" element={<HomeRedirect />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/shops/:sellerId" element={<ShopProfile />} />
 
       <Route
         path="/customer-dashboard"
@@ -73,6 +79,14 @@ function AppRoutes() {
         }
       />
       <Route
+  path="/youfix"
+  element={
+    <ProtectedRoute role="customer">
+      <YouFix />
+    </ProtectedRoute>
+  }
+/>
+      <Route
   path="/nearby-shops"
   element={
     <ProtectedRoute role="customer">
@@ -90,7 +104,6 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <div className="fixit-app">
-          <WorkbenchBackground />
           <div className="fixit-content">
             <AppRoutes />
           </div>
